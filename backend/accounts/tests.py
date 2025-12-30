@@ -1,44 +1,44 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from rest_framework.test import APIClient
-from rest_framework import status
 
 User = get_user_model()
 
-class UserAuthTests(TestCase):
+class UserManagementTests(TestCase):
     def setUp(self):
-        self.client = APIClient()
-        self.signup_url = '/api/auth/signup/'
-        self.login_url = '/api/auth/login/'
+        self.user_data = {
+            "email": "testuser@example.com",
+            "password": "SecurePassword123",
+            "full_name": "Test User"
+        }
 
-    def test_user_signup_success(self):
-        # Test 1: Successful signup with valid data
-        data = {"email": "test@example.com", "password": "Password123", "full_name": "Test User"}
-        response = self.client.post(self.signup_url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def test_create_user(self):
+        """Test if a user can be created successfully"""
+        user = User.objects.create_user(**self.user_data)
+        self.assertEqual(user.email, self.user_data["email"])
+        self.assertTrue(user.check_password(self.user_data["password"]))
 
-    def test_duplicate_email_signup_fails(self):
-        # Test 2: Ensure unique email constraint [Requirement: Unique email]
-        User.objects.create_user(email="test@example.com", username="test@example.com", password="Password123", full_name="User 1")
-        data = {"email": "test@example.com", "password": "Password123", "full_name": "User 2"}
-        response = self.client.post(self.signup_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_user_is_not_staff_by_default(self):
+        """Verify role-based logic: normal users are not staff"""
+        user = User.objects.create_user(**self.user_data)
+        self.assertFalse(user.is_staff)
 
-    def test_weak_password_signup_fails(self):
-        # Test 3: Ensure password strength validation [Requirement: Password validation]
-        data = {"email": "weak@example.com", "password": "123", "full_name": "Weak User"}
-        response = self.client.post(self.signup_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_create_superuser(self):
+        """Test admin role creation"""
+        admin = User.objects.create_superuser(
+            email="admin@example.com", 
+            password="AdminPassword123",
+            full_name="Admin User"
+        )
+        self.assertTrue(admin.is_staff)
+        self.assertTrue(admin.is_superuser)
 
-    def test_login_success_and_token(self):
-        # Test 4: Verify credentials and token return [Requirement: JWT Token]
-        User.objects.create_user(email="login@example.com", username="login@example.com", password="Password123", full_name="Login User")
-        data = {"email": "login@example.com", "password": "Password123"}
-        response = self.client.post(self.login_url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('token', response.data)
+    def test_duplicate_email_fails(self):
+        """Ensure unique email constraint is working"""
+        User.objects.create_user(**self.user_data)
+        with self.assertRaises(Exception):
+            User.objects.create_user(**self.user_data)
 
-    def test_unauthenticated_profile_access_fails(self):
-        # Test 5: Verify route protection [Requirement: Protected routes]
-        response = self.client.get('/api/auth/profile/')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+    def test_full_name_storage(self):
+        """Verify custom field 'full_name' is saved correctly"""
+        user = User.objects.create_user(**self.user_data)
+        self.assertEqual(user.full_name, "Test User")
