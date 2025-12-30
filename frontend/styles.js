@@ -1,0 +1,30 @@
+export const styles = {
+  fullPageCenter: { minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f8fafc' },
+  card: { width: '100%', maxWidth: '420px', padding: '40px', backgroundColor: '#fff', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)', border: '1px solid #e2e8f0' },
+  header: { textAlign: 'center', marginBottom: '32px' },
+  title: { fontSize: '26px', fontWeight: '700', color: '#0f172a', margin: '0 0 8px 0' },
+  subtitle: { fontSize: '14px', color: '#64748b' },
+  inputGroup: { marginBottom: '20px' },
+  label: { display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px' },
+  input: { width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none' },
+  primaryBtn: { width: '100%', padding: '12px', backgroundColor: '#2563eb', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' },
+  footerText: { textAlign: 'center', marginTop: '24px', fontSize: '14px' },
+  link: { color: '#2563eb', fontWeight: '600', textDecoration: 'none' },
+
+  // Dashboard Specific
+  dashboardLayout: { minHeight: '100vh', padding: '40px 20px', display: 'flex', justifyContent: 'center' },
+  contentWrapper: { width: '100%', maxWidth: '1000px' },
+  dashboardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' },
+  pageTitle: { fontSize: '24px', fontWeight: '700' },
+  logoutBtn: { backgroundColor: '#ef4444', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' },
+  statsGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '30px' },
+  statCard: { backgroundColor: '#fff', padding: '24px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' },
+  statLabel: { color: '#64748b', fontSize: '14px', margin: 0 },
+  statValue: { fontSize: '32px', margin: '10px 0 0 0' },
+  tableContainer: { backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', overflow: 'hidden' },
+  table: { width: '100%', borderCollapse: 'collapse', textAlign: 'left' },
+  th: { padding: '16px 24px', backgroundColor: '#f8fafc', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', color: '#64748b' },
+  td: { padding: '16px 24px', borderTop: '1px solid #f1f5f9' },
+  adminBadge: { padding: '4px 12px', backgroundColor: '#dcfce7', color: '#166534', borderRadius: '99px', fontSize: '12px', fontWeight: '600' },
+  userBadge: { padding: '4px 12px', backgroundColor: '#dbeafe', color: '#1e40af', borderRadius: '99px', fontSize: '12px', fontWeight: '600' }
+};
