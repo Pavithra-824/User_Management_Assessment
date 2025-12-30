@@ -12,10 +12,9 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<AdminDashboard />} />
         <Route path="/profile" element={<UserProfile />} />
-        <Route path="/" element={<Login />} /> {/* Default to login */}
+        <Route path="/" element={<Login />} />
       </Routes>
     </Router>
   );
 }
-
 export default App;

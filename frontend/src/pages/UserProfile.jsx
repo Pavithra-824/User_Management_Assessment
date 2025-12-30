@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { styles } from '../styles'; // Importing our shared professional styles
 import { styles } from '../styles';
 const UserProfile = () => {
   const [profile, setProfile] = useState({ full_name: '', email: '' });
