@@ -1,30 +1,24 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { styles } from '../styles';
+import { styles } from '../styles'; 
+
 const Signup = () => {
   const [formData, setFormData] = useState({ full_name: '', email: '', password: '' });
   const navigate = useNavigate();
 
-const handleSignup = async (e) => {
-  e.preventDefault();
-  try {
-    // 1. Log the data being sent to verify it's not empty
-    console.log("Sending Form Data:", formData);
-
-    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/register/`, formData);
-    
-    alert("Registration Successful!");
-    navigate('/login');
-  } catch (err) {
-    // 2. Capture the actual error message from the backend
-    const errorMsg = err.response?.data?.email || err.response?.data?.detail || "Signup failed. Please try again.";
-    console.error("Server Error:", err.response?.data);
-    
-    // 3. Show the real error instead of the hardcoded "Email exists" message
-    alert(`Error: ${errorMsg}`);
-  }
-};
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    try {
+      // Updated endpoint to match backend: /api/signup/
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/signup/`, formData);
+      alert("Registration Successful! Redirecting to Login...");
+      navigate('/login');
+    } catch (err) {
+      const errorMsg = err.response?.data?.email || err.response?.data?.detail || "Signup failed.";
+      alert(`Error: ${errorMsg}`);
+    }
+  };
 
   return (
     <div style={styles.fullPageCenter}>
@@ -36,15 +30,33 @@ const handleSignup = async (e) => {
         <form onSubmit={handleSignup} style={styles.form}>
           <div style={styles.inputGroup}>
             <label style={styles.label}>Full Name</label>
-            <input type="text" style={styles.input} value={formData.full_name} onChange={(e) => setFormData({...formData, full_name: e.target.value})} required placeholder="John Doe" />
+            <input 
+              type="text" 
+              style={styles.input} 
+              value={formData.full_name} 
+              onChange={(e) => setFormData({...formData, full_name: e.target.value})} 
+              required 
+            />
           </div>
           <div style={styles.inputGroup}>
             <label style={styles.label}>Email Address</label>
-            <input type="email" style={styles.input} value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required placeholder="name@company.com" />
+            <input 
+              type="email" 
+              style={styles.input} 
+              value={formData.email} 
+              onChange={(e) => setFormData({...formData, email: e.target.value})} 
+              required 
+            />
           </div>
           <div style={styles.inputGroup}>
             <label style={styles.label}>Password</label>
-            <input type="password" style={styles.input} value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} required placeholder="••••••••" />
+            <input 
+              type="password" 
+              style={styles.input} 
+              value={formData.password} 
+              onChange={(e) => setFormData({...formData, password: e.target.value})} 
+              required 
+            />
           </div>
           <button type="submit" style={styles.primaryBtn}>Sign Up</button>
         </form>
