@@ -10,15 +10,32 @@ const Signup = () => {
   const handleSignup = async (e) => {
   e.preventDefault();
   try {
-    // This cleaning logic ensures the URL is ALWAYS correct
     const baseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
-    await axios.post(`${baseUrl}/api/signup/`, formData);
+    const res = await axios.post(`${baseUrl}/api/signup/`, formData);
     
-    alert("Registration Successful! Redirecting to Login...");
-    navigate('/login');
+    // Check if your new backend returns a token immediately
+    if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+        alert("Registration Successful!");
+        navigate('/profile'); 
+    } else {
+        alert("Registration Successful! Please login.");
+        navigate('/login');
+    }
   } catch (err) {
-    const errorMsg = err.response?.data?.email || err.response?.data?.detail || "Signup failed.";
-    alert(`Error: ${errorMsg}`);
+    // This part is critical: it captures the specific validation error
+    const errors = err.response?.data;
+    let errorMsg = "";
+    
+    if (typeof errors === 'object') {
+        errorMsg = Object.entries(errors)
+            .map(([field, msg]) => `${field}: ${msg}`)
+            .join("\n");
+    } else {
+        errorMsg = "Signup failed. Please try again.";
+    }
+    
+    alert(`Validation Error:\n${errorMsg}`);
   }
 };
   return (
