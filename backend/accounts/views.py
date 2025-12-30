@@ -29,19 +29,28 @@ class SignupView(APIView):
 
 class LoginView(APIView):
     def post(self, request):
-        email = request.data.get("email") # Frontend sends email
+        email = request.data.get("email")
         password = request.data.get("password")
 
-        # Authenticate using email since that's what your frontend collects
-        try:
-            user_obj = User.objects.get(email=email)
-            user = authenticate(username=user_obj.username, password=password)
-        except User.DoesNotExist:
-            user = None
+        if not email or not password:
+            return Response(
+                {"error": "Email and password are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Fix: Since USERNAME_FIELD is 'email', pass the email to authenticate
+        user = authenticate(request, username=email, password=password)
 
         if not user:
             return Response(
-                {"error": "Invalid credentials"},
+                {"error": "Invalid credentials. Please check your email and password."},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        # Ensure user is active
+        if not user.is_active:
+            return Response(
+                {"error": "This account is inactive."},
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
@@ -52,6 +61,7 @@ class LoginView(APIView):
             "user": {
                 "username": user.username,
                 "email": user.email,
-                "role": user.role # Fixed: Required for frontend routing
+                "role": user.role,
+                "full_name": user.full_name
             }
         })
