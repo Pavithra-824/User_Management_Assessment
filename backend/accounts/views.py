@@ -38,24 +38,16 @@ class LoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Fix: Since USERNAME_FIELD is 'email', pass the email to authenticate
+        # IMPORTANT: Since USERNAME_FIELD = 'email', we pass email to the 'username' parameter
         user = authenticate(request, username=email, password=password)
 
         if not user:
             return Response(
-                {"error": "Invalid credentials. Please check your email and password."},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-
-        # Ensure user is active
-        if not user.is_active:
-            return Response(
-                {"error": "This account is inactive."},
+                {"error": "Invalid email or password"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
         refresh = RefreshToken.for_user(user)
-
         return Response({
             "token": str(refresh.access_token),
             "user": {
