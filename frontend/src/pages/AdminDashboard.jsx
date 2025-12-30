@@ -8,29 +8,41 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div style={styles.container}>
-      {/* Sidebar Placeholder or Header */}
+  <div style={styles.container}>
+    <div style={styles.contentWrapper}>
+      {/* 1. Header Section */}
       <header style={styles.header}>
-        <h1 style={styles.pageTitle}>User Management Dashboard</h1>
-        <button style={styles.logoutBtn}>Logout</button>
+        <div>
+          <h1 style={styles.pageTitle}>User Management Dashboard</h1>
+          <p style={styles.subtitle}>Manage system users and their roles</p>
+        </div>
+        <button 
+          onClick={() => {
+            localStorage.removeItem('token'); // Basic logout logic
+            window.location.href = '/login';
+          }} 
+          style={styles.logoutBtn}
+        >
+          Logout
+        </button>
       </header>
 
-      {/* Metric Cards */}
+      {/* 2. Stats/Metrics Section */}
       <div style={styles.statsGrid}>
         <div style={styles.statCard}>
-          <p style={styles.statLabel}>Total Users</p>
+          <p style={styles.statLabel}>Total Registered Users</p>
           <h3 style={styles.statValue}>{users.length}</h3>
         </div>
         <div style={styles.statCard}>
-          <p style={styles.statLabel}>Active Sessions</p>
-          <h3 style={styles.statValue}>12</h3>
+          <p style={styles.statLabel}>System Status</p>
+          <h3 style={{...styles.statValue, color: '#10b981'}}>Active</h3>
         </div>
       </div>
 
-      {/* User Table Card */}
+      {/* 3. Main Data Table Section */}
       <div style={styles.tableCard}>
         <div style={styles.tableHeader}>
-          <h2 style={styles.tableTitle}>All Registered Users</h2>
+          <h2 style={styles.tableTitle}>User Directory</h2>
         </div>
         
         <table style={styles.table}>
@@ -48,8 +60,8 @@ const AdminDashboard = () => {
                 <td style={styles.td}>{user.full_name}</td>
                 <td style={styles.td}>{user.email}</td>
                 <td style={styles.td}>
-                  <span style={user.role === 'Admin' ? styles.adminBadge : styles.userBadge}>
-                    {user.role}
+                  <span style={user.is_staff ? styles.adminBadge : styles.userBadge}>
+                    {user.is_staff ? 'Admin' : 'User'}
                   </span>
                 </td>
                 <td style={styles.td}>
@@ -62,17 +74,25 @@ const AdminDashboard = () => {
         </table>
       </div>
     </div>
-  );
+  </div>
+);
 };
-
 // Modern Dashboard Styles
 const styles = {
   container: {
-    padding: '30px',
-    backgroundColor: '#f1f5f9', // Light slate background
-    minHeight: '100vh',
-    fontFamily: "'Inter', sans-serif",
-  },
+  backgroundColor: '#f1f5f9',
+  minHeight: '100vh',
+  fontFamily: "'Inter', sans-serif",
+  padding: '40px 20px',      // 40px top/bottom, 20px sides
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',      // Centers the children horizontally
+},
+contentWrapper: {
+  width: '100%',
+  maxWidth: '1200px',        // Limits the width on wide screens
+  margin: '0 auto',          // Standard centering trick
+},
   header: {
     display: 'flex',
     justifyContent: 'space-between',

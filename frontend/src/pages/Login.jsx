@@ -44,13 +44,14 @@ const Login = () => {
 // Professional CSS-in-JS Styles
 const styles = {
   container: {
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f8fafc', // Modern slate background
-    fontFamily: "'Inter', sans-serif",
-  },
+  minHeight: '100vh',
+  display: 'flex',          // Use Flexbox
+  alignItems: 'center',      // Centers vertically
+  justifyContent: 'center',  // Centers horizontally
+  backgroundColor: '#f8fafc',
+  fontFamily: "'Inter', sans-serif",
+  padding: '20px',           // Prevents touching edges on mobile
+},
   card: {
     width: '100%',
     maxWidth: '400px',
