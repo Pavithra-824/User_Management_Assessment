@@ -11,6 +11,17 @@ class SignupView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True) # This triggers the 400 error if data is invalid
+        user = serializer.save()
+        
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            "user": serializer.data,
+            "token": str(refresh.access_token),
+        }, status=status.HTTP_201_CREATED)
+    
 class LoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
