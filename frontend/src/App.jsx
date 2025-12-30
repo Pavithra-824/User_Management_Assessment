@@ -6,7 +6,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserProfile from './pages/UserProfile';
 
 function App() {
-  console.log("App is rendering..."); // Check this in F12 console
+  console.log("App is rendering..."); 
   
   return (
     <Router>
