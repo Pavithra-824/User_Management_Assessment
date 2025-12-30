@@ -6,15 +6,16 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserProfile from './pages/UserProfile';
 
 function App() {
+  console.log("App is rendering..."); // Check this in F12 console
+  
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<AdminDashboard />} />
         <Route path="/profile" element={<UserProfile />} />
-        {/* This ensures the blank homepage redirects to Login */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
