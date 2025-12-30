@@ -5,9 +5,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import UserProfile from './pages/UserProfile';
 import AdminDashboard from './pages/AdminDashboard';
-// Placeholder components for now
-const AdminDashboard = () => <div className="p-8"><h1>Admin Dashboard - Users List coming next</h1></div>;
-const UserProfile = () => <div className="p-8"><h1>User Profile - Settings coming next</h1></div>;
+
 
 function App() {
   return (
