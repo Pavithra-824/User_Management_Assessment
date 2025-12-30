@@ -64,3 +64,23 @@ class LoginView(APIView):
                 "full_name": user.full_name
             }
         })
+from rest_framework.permissions import IsAuthenticated
+
+# Add this at the bottom of your views.py
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated] # Ensures only logged-in users see this
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            "full_name": user.full_name,
+            "email": user.email,
+            "username": user.username,
+            "role": user.role
+        })
+
+    def put(self, request):
+        user = request.user
+        user.full_name = request.data.get("full_name", user.full_name)
+        user.save()
+        return Response({"message": "Profile updated successfully"})
