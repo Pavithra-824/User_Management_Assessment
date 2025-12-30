@@ -4,6 +4,9 @@ from rest_framework import status
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
+
+from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class SignupView(APIView):
@@ -11,38 +14,18 @@ class SignupView(APIView):
         username = request.data.get("username")
         email = request.data.get("email")
         password = request.data.get("password")
-        full_name = request.data.get("full_name")  # New field required by DB
+        full_name = request.data.get("full_name") # Collect this
 
-        if not username or not email or not password or not full_name:
-            return Response(
-                {"error": "All fields (username, email, password, full_name) are required"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        if User.objects.filter(username=username).exists():
-            return Response(
-                {"error": "Username already exists"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-            
-        if User.objects.filter(email=email).exists():
-            return Response(
-                {"error": "Email already exists"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        if not all([username, email, password, full_name]):
+            return Response({"error": "All fields required"}, status=400)
 
         user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-            full_name=full_name  # Fixed: Database requires this field
+            username=username, 
+            email=email, 
+            password=password, 
+            full_name=full_name # Save this
         )
-
-        return Response(
-            {"message": "User created successfully"},
-            status=status.HTTP_201_CREATED
-        )
-
+        return Response({"message": "User created"}, status=201)
 
 class LoginView(APIView):
     def post(self, request):

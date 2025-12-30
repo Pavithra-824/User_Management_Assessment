@@ -56,14 +56,13 @@ const Signup = () => {
         />
 
         <input
-          type="text"
-          name="full_name"
-          placeholder="Full Name"
-          value={formData.full_name}
-          onChange={handleChange}
-          required
-        />
-
+  type="text"
+  name="full_name"
+  placeholder="Full Name"
+  value={formData.full_name}
+  onChange={handleChange}
+  required
+/>
         <input
           type="email"
           name="email"
