@@ -1,64 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 import { styles } from '../styles';
+
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasNext, setHasNext] = useState(false);
 
-  useEffect(() => {
-const fetchUsers = async () => {
-  const token = localStorage.getItem('token');
-  // Add 'admin/' to the path to match your backend urls.py
-  const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users/`, {
-  headers: { Authorization: `Bearer ${token}` }
-});
-  setUsers(res.data);
-};
-    fetchUsers();
-  }, []);
+  const fetchUsers = async (pageNum = 1) => {
+    try {
+      const res = await API.get(`admin/users/?page=${pageNum}`);
+      // Since pagination is enabled in settings.py, data is an object
+      setUsers(res.data.results);
+      setHasNext(!!res.data.next);
+      setPage(pageNum);
+    } catch (err) { alert("Failed to load users"); }
+  };
+
+  useEffect(() => { fetchUsers(); }, []);
+
+  const toggleStatus = async (id, currentStatus, name) => {
+    if (!window.confirm(`Are you sure you want to change status for ${name}?`)) return;
+    try {
+      await API.post(`admin/users/${id}/toggle-status/`);
+      fetchUsers(page); // Refresh current page
+    } catch (err) { alert("Action failed"); }
+  };
 
   return (
     <div style={styles.dashboardLayout}>
-      <div style={styles.contentWrapper}>
-        <header style={styles.dashboardHeader}>
-          <h1 style={styles.pageTitle}>Admin Control Panel</h1>
-          <button onClick={() => { localStorage.clear(); window.location.href='/login'; }} style={styles.logoutBtn}>Logout</button>
-        </header>
-
-        <div style={styles.statsGrid}>
-          <div style={styles.statCard}>
-            <p style={styles.statLabel}>Total Users</p>
-            <h2 style={styles.statValue}>{users.length}</h2>
-          </div>
-          <div style={styles.statCard}>
-            <p style={styles.statLabel}>Database Status</p>
-            <h2 style={{...styles.statValue, color: '#10b981'}}>Connected</h2>
-          </div>
-        </div>
-
-        <div style={styles.tableContainer}>
-          <table style={styles.table}>
-            <thead style={styles.thead}>
-              <tr>
-                <th style={styles.th}>Name</th>
-                <th style={styles.th}>Email</th>
-                <th style={styles.th}>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(u => (
-                <tr key={u.id} style={styles.tr}>
-                  <td style={styles.td}>{u.full_name}</td>
-                  <td style={styles.td}>{u.email}</td>
-                  <td style={styles.td}>
-                    <span style={u.is_staff ? styles.adminBadge : styles.userBadge}>
-                      {u.is_staff ? 'Admin' : 'User'}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <h1>Admin Dashboard</h1>
+      <table style={styles.table}>
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {users.map(u => (
+            <tr key={u.id}>
+              <td>{u.full_name}</td>
+              <td>{u.email}</td>
+              <td>{u.status}</td>
+              <td>
+                <button onClick={() => toggleStatus(u.id, u.status, u.full_name)}>
+                  {u.status === 'active' ? 'Deactivate' : 'Activate'}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div style={{marginTop: '20px', textAlign: 'center'}}>
+        <button disabled={page === 1} onClick={() => fetchUsers(page - 1)}>Prev</button>
+        <span style={{margin: '0 15px'}}>Page {page}</span>
+        <button disabled={!hasNext} onClick={() => fetchUsers(page + 1)}>Next</button>
       </div>
     </div>
   );
