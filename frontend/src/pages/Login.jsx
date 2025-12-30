@@ -1,85 +1,123 @@
-import { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const { login } = useContext(AuthContext);
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        try {
-            const user = await login(email, password);
-            if (user.role === 'admin') {
-                navigate('/admin');
-            } else {
-                navigate('/profile');
-            }
-        } catch (err) {
-            setError(err.response?.data?.error || 'Invalid credentials. Please try again.');
-        }
-    };
-
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
-                <div className="flex justify-center mb-6">
-                    <LogIn className="w-12 h-12 text-blue-600" />
-                </div>
-                <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
-                
-                {error && (
-                    <div className="flex items-center p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
-                        <AlertCircle className="w-5 h-5 mr-2" />
-                        {error}
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Email Address</label>
-                        <div className="relative mt-1">
-                            <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                            <input
-                                type="email"
-                                required
-                                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Password</label>
-                        <div className="relative mt-1">
-                            <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                            <input
-                                type="password"
-                                required
-                                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
-                    >
-                        Sign In
-                    </button>
-                </form>
-                <p className="mt-4 text-center text-sm text-gray-600">
-                    Don't have an account? <Link to="/signup" className="text-blue-600 hover:underline">Sign up</Link>
-                </p>
-            </div>
+  return (
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <div style={styles.header}>
+          <h1 style={styles.title}>Welcome Back</h1>
+          <p style={styles.subtitle}>Enter your credentials to access your account</p>
         </div>
-    );
+
+        <form style={styles.form}>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Email Address</label>
+            <input 
+              type="email" 
+              placeholder="name@company.com" 
+              style={styles.input} 
+            />
+          </div>
+
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Password</label>
+            <input 
+              type="password" 
+              placeholder="••••••••" 
+              style={styles.input} 
+            />
+          </div>
+
+          <button type="submit" style={styles.button}>
+            Sign In
+          </button>
+        </form>
+
+        <div style={styles.footer}>
+          <p>Don't have an account? <a href="/signup" style={styles.link}>Create one</a></p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Professional CSS-in-JS Styles
+const styles = {
+  container: {
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f8fafc', // Modern slate background
+    fontFamily: "'Inter', sans-serif",
+  },
+  card: {
+    width: '100%',
+    maxWidth: '400px',
+    backgroundColor: '#ffffff',
+    padding: '40px',
+    borderRadius: '16px',
+    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+    border: '1px solid #e2e8f0',
+  },
+  header: {
+    textAlign: 'center',
+    marginBottom: '32px',
+  },
+  title: {
+    fontSize: '24px',
+    fontWeight: '700',
+    color: '#1e293b',
+    margin: '0 0 8px 0',
+  },
+  subtitle: {
+    fontSize: '14px',
+    color: '#64748b',
+    margin: 0,
+  },
+  inputGroup: {
+    marginBottom: '20px',
+  },
+  label: {
+    display: 'block',
+    fontSize: '14px',
+    fontWeight: '500',
+    color: '#475569',
+    marginBottom: '8px',
+  },
+  input: {
+    width: '100%',
+    padding: '12px 16px',
+    borderRadius: '8px',
+    border: '1px solid #cbd5e1',
+    fontSize: '15px',
+    boxSizing: 'border-box',
+    transition: 'border-color 0.2s',
+  },
+  button: {
+    width: '100%',
+    padding: '12px',
+    backgroundColor: '#2563eb', // Royal Blue
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    marginTop: '10px',
+    transition: 'background-color 0.2s',
+  },
+  footer: {
+    marginTop: '24px',
+    textAlign: 'center',
+    fontSize: '14px',
+    color: '#64748b',
+  },
+  link: {
+    color: '#2563eb',
+    textDecoration: 'none',
+    fontWeight: '600',
+  }
 };
 
 export default Login;
