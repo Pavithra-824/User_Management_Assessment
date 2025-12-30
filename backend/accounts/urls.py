@@ -1,6 +1,4 @@
-# backend/accounts/urls.py
 from django.urls import path
-# Add UserProfileView, SignupView, and UserListView to this import line
 from .views import LoginView, SignupView, UserProfileView, UserListView
 
 urlpatterns = [
