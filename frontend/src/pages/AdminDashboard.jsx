@@ -9,8 +9,8 @@ const fetchUsers = async () => {
   const token = localStorage.getItem('token');
   // Add 'admin/' to the path to match your backend urls.py
   const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users/`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  headers: { Authorization: `Bearer ${token}` }
+});
   setUsers(res.data);
 };
     fetchUsers();

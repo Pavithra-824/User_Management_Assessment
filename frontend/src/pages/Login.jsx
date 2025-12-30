@@ -13,19 +13,19 @@ const handleLogin = async (e) => {
   try {
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/login/`, { email, password });
     
-    // 1. Save the token
+    // 1. Store the token for future requests
     localStorage.setItem('token', res.data.token);
     
-    // 2. Get the role from the backend response
+    // 2. Extract the role from the backend response
     const userRole = res.data.user.role; 
 
     alert("Login Successful!");
 
-    // 3. Dynamic Navigation
+    // 3. This is the crucial logic for user vs admin
     if (userRole === 'admin') {
-      navigate('/dashboard'); // Admins go to the Control Panel
+      navigate('/dashboard'); 
     } else {
-      navigate('/profile');   // Normal users go to their Profile
+      navigate('/profile'); // NORMAL USERS GO HERE
     }
   } catch (err) {
     alert("Login Failed. Check your email and password.");
