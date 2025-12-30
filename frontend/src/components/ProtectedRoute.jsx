@@ -3,15 +3,17 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
-    const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
 
-    if (!user) return <Navigate to="/login" />;
-    
-    if (adminOnly && user.role !== 'admin') {
-        return <Navigate to="/profile" />; // Redirect regular users away from admin pages
-    }
+  if (loading) return null;
 
-    return children;
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (adminOnly && user.role !== 'admin') {
+    return <Navigate to="/profile" replace />;
+  }
+
+  return children;
 };
 
 export default ProtectedRoute;
