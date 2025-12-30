@@ -8,21 +8,29 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      // Updated endpoint to match backend: /api/login/
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/login/`, { email, password });
-      
-      // Save the token and the role (if your API provides is_staff)
-      localStorage.setItem('token', res.data.access || res.data.token);
-      alert("Login Successful!");
-      navigate('/dashboard');
-    } catch (err) {
-      alert("Login Failed. Check your email and password.");
-    }
-  };
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/login/`, { email, password });
+    
+    // 1. Save the token
+    localStorage.setItem('token', res.data.token);
+    
+    // 2. Get the role from the backend response
+    const userRole = res.data.user.role; 
 
+    alert("Login Successful!");
+
+    // 3. Dynamic Navigation
+    if (userRole === 'admin') {
+      navigate('/dashboard'); // Admins go to the Control Panel
+    } else {
+      navigate('/profile');   // Normal users go to their Profile
+    }
+  } catch (err) {
+    alert("Login Failed. Check your email and password.");
+  }
+};
   return (
     <div style={styles.fullPageCenter}>
       <div style={styles.card}>

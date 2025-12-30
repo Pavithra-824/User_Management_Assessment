@@ -8,18 +8,19 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
-    e.preventDefault();
-    try {
-      // Updated endpoint to match backend: /api/signup/
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/signup/`, formData);
-      alert("Registration Successful! Redirecting to Login...");
-      navigate('/login');
-    } catch (err) {
-      const errorMsg = err.response?.data?.email || err.response?.data?.detail || "Signup failed.";
-      alert(`Error: ${errorMsg}`);
-    }
-  };
-
+  e.preventDefault();
+  try {
+    // This cleaning logic ensures the URL is ALWAYS correct
+    const baseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
+    await axios.post(`${baseUrl}/api/signup/`, formData);
+    
+    alert("Registration Successful! Redirecting to Login...");
+    navigate('/login');
+  } catch (err) {
+    const errorMsg = err.response?.data?.email || err.response?.data?.detail || "Signup failed.";
+    alert(`Error: ${errorMsg}`);
+  }
+};
   return (
     <div style={styles.fullPageCenter}>
       <div style={styles.card}>
