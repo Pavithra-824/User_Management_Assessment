@@ -6,16 +6,25 @@ const Signup = () => {
   const [formData, setFormData] = useState({ full_name: '', email: '', password: '' });
   const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/register/`, formData);
-      alert("Registration Successful!");
-      navigate('/login');
-    } catch (err) {
-      alert("Signup failed. Email might already exist.");
-    }
-  };
+const handleSignup = async (e) => {
+  e.preventDefault();
+  try {
+    // 1. Log the data being sent to verify it's not empty
+    console.log("Sending Form Data:", formData);
+
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/register/`, formData);
+    
+    alert("Registration Successful!");
+    navigate('/login');
+  } catch (err) {
+    // 2. Capture the actual error message from the backend
+    const errorMsg = err.response?.data?.email || err.response?.data?.detail || "Signup failed. Please try again.";
+    console.error("Server Error:", err.response?.data);
+    
+    // 3. Show the real error instead of the hardcoded "Email exists" message
+    alert(`Error: ${errorMsg}`);
+  }
+};
 
   return (
     <div style={styles.fullPageCenter}>
