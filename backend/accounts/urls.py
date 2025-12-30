@@ -1,10 +1,16 @@
 from django.urls import path
-from .views import LoginView, SignupView, UserProfileView, UserListView
+from .views import (
+    SignupView,
+    LoginView,
+    UserProfileView,
+    AdminUserListView,
+    ToggleUserStatusView
+)
 
 urlpatterns = [
-    path('signup/', SignupView.as_view(), name='signup'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('profile/', UserProfileView.as_view(), name='profile'),
-    path('profile/update/', UserProfileView.as_view(), name='profile_update'),
-    path('admin/users/', UserListView.as_view(), name='user_list'),
+    path('signup/', SignupView.as_view()),
+    path('login/', LoginView.as_view()),
+    path('profile/', UserProfileView.as_view()),
+    path('admin/users/', AdminUserListView.as_view()),
+    path('admin/users/<int:user_id>/toggle/', ToggleUserStatusView.as_view()),
 ]
