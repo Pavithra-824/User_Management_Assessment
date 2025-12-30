@@ -152,4 +152,4 @@ CSRF_TRUSTED_ORIGINS = [
     'https://user-management-assessment-self.vercel.app',
     'https://*.vercel.app',
 ]
-
+AUTH_USER_MODEL = 'accounts.User'
