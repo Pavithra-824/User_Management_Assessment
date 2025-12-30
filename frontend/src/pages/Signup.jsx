@@ -7,6 +7,7 @@ const Signup = () => {
 
   const [formData, setFormData] = useState({
     username: '',
+    full_name: '', // Added field
     email: '',
     password: '',
   });
@@ -36,43 +37,54 @@ const Signup = () => {
       navigate('/login');
     } catch (err) {
       console.error(err.response?.data);
-      alert('Signup failed');
+      alert('Signup failed: ' + JSON.stringify(err.response?.data));
     }
   };
 
   return (
-    <form onSubmit={handleSignup}>
-      <h2>Signup</h2>
+    <div style={{ padding: '20px' }}>
+      <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px', gap: '10px' }}>
+        <h2>Signup</h2>
 
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        value={formData.username}
-        onChange={handleChange}
-        required
-      />
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
 
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-      />
+        <input
+          type="text"
+          name="full_name"
+          placeholder="Full Name"
+          value={formData.full_name}
+          onChange={handleChange}
+          required
+        />
 
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-      />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
 
-      <button type="submit">Sign Up</button>
-    </form>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
   );
 };
 
