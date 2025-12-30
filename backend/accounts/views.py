@@ -1,15 +1,20 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+from .models import User
+from .serializers import UserSerializer
+
+class SignupView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 class LoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
-
         user = authenticate(email=email, password=password)
 
         if user is not None:
@@ -19,18 +24,34 @@ class LoginView(APIView):
             refresh = RefreshToken.for_user(user)
             return Response({
                 "token": str(refresh.access_token),
-                "role": user.role,  # 'admin' or 'user'
-                "full_name": user.full_name
+                "user": {
+                    "email": user.email,
+                    "role": user.role,
+                    "full_name": user.full_name
+                }
             }, status=status.HTTP_200_OK)
-        
         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
-# Example of a separate view for Admin only
-class AdminDashboardView(APIView):
+class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        if request.user.role != 'admin':
-            return Response({"error": "Access denied. Admins only."}, status=status.HTTP_403_FORBIDDEN)
-        
-        return Response({"message": "Welcome to the Admin Dashboard!"})
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+
+    def put(self, request):
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        if self.request.user.role != 'admin':
+            return User.objects.none()
+        return User.objects.all()
+    
