@@ -20,10 +20,10 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    const login = async (email, password) => {
+   const login = async (email, password) => {
         const res = await API.post('login/', { email, password });
         localStorage.setItem('token', res.data.token);
-        setUser(res.data.user);
+        setUser(res.data.user); // Store the user object from backend
         return res.data.user;
     };
 

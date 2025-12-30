@@ -12,23 +12,18 @@ const handleLogin = async (e) => {
   e.preventDefault();
   try {
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/login/`, { email, password });
-    
-    // 1. Store the token for future requests
     localStorage.setItem('token', res.data.token);
-    
-    // 2. Extract the role from the backend response
+
+    // Correctly access the role from the response structure
     const userRole = res.data.user.role; 
 
-    alert("Login Successful!");
-
-    // 3. This is the crucial logic for user vs admin
     if (userRole === 'admin') {
       navigate('/dashboard'); 
     } else {
-      navigate('/profile'); // NORMAL USERS GO HERE
+      navigate('/profile');
     }
   } catch (err) {
-    alert("Login Failed. Check your email and password.");
+    alert("Login Failed. Check credentials.");
   }
 };
   return (

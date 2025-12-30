@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: 'https://user-management-assessment.onrender.com/api/',
+    baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/` : 'http://localhost:8000/api/',
 });
 
 // Automatically add the JWT token to every request if it exists
