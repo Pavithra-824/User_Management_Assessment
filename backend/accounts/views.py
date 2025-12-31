@@ -25,16 +25,20 @@ class SignupView(APIView):
         )
         return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
 
+from rest_framework.permissions import IsAuthenticated
+
+# ... (Keep your SignupView)
+
 class LoginView(APIView):
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
 
-        # Because USERNAME_FIELD = 'email', we pass email to the 'username' parameter
+        # Because USERNAME_FIELD = 'email', authenticate expects email as 'username'
         user = authenticate(request, username=email, password=password)
 
         if not user:
-            return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "Invalid email or password"}, status=401)
 
         refresh = RefreshToken.for_user(user)
         return Response({
