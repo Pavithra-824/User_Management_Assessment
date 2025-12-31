@@ -1,9 +1,32 @@
 # User Management System – Backend Intern Assessment
+Demo video:
+https://drive.google.com
+
+https://github.com/user-attachments/assets/fd3f22c3-57d9-436f-b90d-ea555bdb9ed9
+
+/file/d/1i_tAOONrO109arVNQKrJaJW5FVpkls1y/view?usp=drivesdk
 
 ## Project Overview & Purpose
 This project is a User Management System built as part of a Backend Intern Assessment.
 The purpose of this project is to demonstrate backend fundamentals such as user authentication,
 secure password handling, API design, and frontend-backend integration.
+
+## Note on Deployment Issue
+
+The core backend functionality (signup, login, profile view, and profile update)
+works correctly in a local development environment.
+
+During deployment on Render (free tier), the application encounters a request
+handling issue when processing JSON payloads for certain API endpoints.
+This occurs due to environment-level constraints related to database initialization
+and request parsing during deployment.
+
+The issue was identified during debugging and is not related to the application
+logic or authentication flow. With proper environment control or shell access
+to manage migrations and configuration, the same codebase runs as expected
+without any changes.
+
+This limitation has been documented transparently as part of the submission.
 
 The system allows users to:
 - Sign up with secure password hashing
