@@ -1,9 +1,7 @@
-from django.urls import path
-from accounts.views import SignupView, LoginView, ProfileView # Ensure ProfileView is imported
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
-    path('signup/', SignupView.as_view()),
-    path('login/', LoginView.as_view()),
-    path('profile/', ProfileView.as_view()),        # This stops the 404 error
-    path('profile/update/', ProfileView.as_view()), # Matches your frontend API call
+    path('admin/', admin.site.urls),
+    path('api/', include('accounts.urls')), # This adds the /api/ prefix back
 ]
