@@ -36,13 +36,14 @@ The system allows users to:
 ## Setup Instructions
 
 ### Backend Setup
-```bash
-cd backend
+```
+```cd backend
 pip install -r requirements.txt
 python manage.py migrate
-python manage.py runserver
+python manage.py runserver ```
+```
 Backend will run at:
-
+```
 cpp
 Copy code
 http://127.0.0.1:8000/
@@ -53,18 +54,18 @@ cd frontend
 npm install
 npm run dev
 Frontend will run at:
-
+```
 arduino
 Copy code
-http://localhost:5173/
+```http://localhost:5173/
 Environment Variables
 Backend Environment Variables
-(Values are not committed for security reasons)
+(Values are not committed for security reasons) ```
 
 SECRET_KEY
 
 DEBUG
-
+```
 DATABASE_URL
 
 Frontend Environment Variables
@@ -77,7 +78,7 @@ Push the backend code to GitHub.
 Create a new Web Service on Render.
 
 Set the build command:
-
+```
 css
 Copy code
 pip install -r requirements.txt && python manage.py migrate
@@ -199,13 +200,7 @@ Copy code
 API Testing
 Postman Collection
 The APIs can be tested using Postman.
-
-Postman Collection Link:
-
-php-template
-Copy code
-<PASTE POSTMAN COLLECTION LINK HERE>
-(Alternatively, APIs can be tested using Swagger/OpenAPI if configured.)
+```
 
 Live Deployment Links
 GitHub Repository:
