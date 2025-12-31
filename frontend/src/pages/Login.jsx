@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+// Changed to 'export default function' to fix the Vercel build error
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,12 +19,14 @@ export default function Login() {
 
       localStorage.setItem('token', res.data.token);
 
+      // Routing logic based on the user's role returned by your API
       if (res.data.user.role === 'admin') {
         navigate('/dashboard');
       } else {
         navigate('/profile');
       }
     } catch (err) {
+      // Improved error alerting so you can see why it fails
       alert('Login failed: ' + (err.response?.data?.error || 'Invalid credentials'));
     }
   };

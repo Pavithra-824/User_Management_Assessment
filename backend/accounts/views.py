@@ -51,7 +51,12 @@ class LoginView(APIView):
             }
         })
 
+from rest_framework.permissions import IsAuthenticated
+
+
+
 class ProfileView(APIView):
+    # This protects the route so only users with a valid token can see it
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -65,6 +70,7 @@ class ProfileView(APIView):
 
     def put(self, request):
         user = request.user
+        # Updates the full_name field as requested by UserProfile.jsx
         user.full_name = request.data.get("full_name", user.full_name)
         user.save()
         return Response({"message": "Profile updated successfully"})
